@@ -2,9 +2,13 @@
 namespace App\Repository;
 
 use App\Models\UserTask;
+use App\Models\Task;
+use App\Models\DocumentFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
+
+
 
 class UserTaskRepsitory extends CoreRepository
 {
@@ -103,6 +107,50 @@ class UserTaskRepsitory extends CoreRepository
 
         return $model;
         
+    }
+
+
+    public function create($request)
+    {
+        $task = new Task;
+        $task->title = $request->title;
+        $task->description = $request->description;
+        $task->work_id = $request->selectedJobId;
+        $data = [];
+        $fileData = [];
+        if($task->save()){
+
+            $users = $request->users;
+            if(count($request->files)){
+                foreach($request->files as $file){
+                    $fileData [] = [
+                        "document_id" => $task->id,
+                        "document_type" => "task",
+                        "fole_id" => $file["response"]["id"]
+                    ];
+                }
+                DocumentFile::insert($files);
+            }
+
+            if(count($users)){
+                foreach($users as $user){
+                   $data [] = [
+                        "sender_id" => $request->user()->id,
+                        "recipient_id" => $user["user"],
+                        "task_id" => $task->id,
+                        "deadline" => time(), 
+                        //"viewed"
+                        "description" => $user["comment"], 
+                        "status" => "active",
+                   ]; 
+                }
+
+                $result = $this->begetQuery()::insert($data);
+
+                return $result;
+            }
+
+        }
     }
 
 }

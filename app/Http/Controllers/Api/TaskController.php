@@ -21,7 +21,9 @@ class TaskController extends Controller
 
     public function create(UserTaskRepsitory $userTaskRepsitory,Request $request)
     {
-        return response()->json($request);
+        $result = $userTaskRepsitory->create($request);
+        return response()->json($result);
+    
     }
     
     
