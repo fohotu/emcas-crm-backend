@@ -20,6 +20,7 @@ class CreateTaskAnswerTable extends Migration
             $table->integer('viewed')->default(0);
             $table->string('status',30)->default('active');
             $table->foreignId('user_task_id')->constrained('user_task');
+            $table->foreignId('created_by')->constrained('users');
             $table->timestamps();
         });
     }

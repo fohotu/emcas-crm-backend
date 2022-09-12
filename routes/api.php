@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\SearchController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\WorkController;
+use App\Http\Controllers\Api\AnswerController;
 
 use App\Repository\UserRepository;
 use App\Repository\FileRepository;
@@ -63,6 +64,11 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
 
+    Route::prefix('answer')->group(function(){
+        Route::post('/create',[AnswerController::class,'create']);
+    });
+
+
     Route::prefix('search')->group(function(){
         Route::get('/live/{q}',[SearchController::class,'live']);
         Route::get('/simple/{q}',[SearchController::class,'simple']);
@@ -70,9 +76,21 @@ Route::middleware('auth:sanctum')->group(function () {
         
     });    
 
+    
+
 });
 
-
+Route::get('download/{filename}',function($filename){
+    $file_path = storage_path().'/app/public/'.$filename;
+    if (file_exists($file_path))
+    {
+        // https://stackoverflow.com/questions/26971668/how-to-create-download-link-in-laravel
+        return Response::download($file_path, $filename, [
+            'Content-Length: '. filesize($file_path)
+        ]);
+        
+    }
+});
 
 /*
 

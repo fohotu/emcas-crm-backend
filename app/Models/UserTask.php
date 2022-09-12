@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class UserTask extends Model
 {
+    
     use HasFactory;
     
     protected $table='user_task';
@@ -16,6 +17,7 @@ class UserTask extends Model
         'recipient_id',
         'task_id',
     ];
+
 
     public function task()
     {

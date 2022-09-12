@@ -23,6 +23,7 @@ class TaskFactory extends Factory
             'work_id'=>$this->faker->numberBetween(1,10),
             'title'=>$this->faker->text(rand(80,120)),
             'description'=>$this->faker->text(40),
+            'created_by' => $this->faker->numberBetween(1,5),
             'status'=>$status[rand(0,3)],
         ];
     }

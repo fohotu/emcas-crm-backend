@@ -20,6 +20,13 @@ abstract class CoreRepository
         return clone $this->model;
     }
 
+    protected function hasArrayItem($array){
+        if(is_array($array) && (count($array) > 0)){
+            return $array; 
+        }
+        return false;
+    }
+
 }
 
 ?>

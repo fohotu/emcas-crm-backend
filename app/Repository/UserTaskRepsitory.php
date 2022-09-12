@@ -7,7 +7,7 @@ use App\Models\DocumentFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
-
+use Carbon\Carbon;
 
 
 class UserTaskRepsitory extends CoreRepository
@@ -25,11 +25,11 @@ class UserTaskRepsitory extends CoreRepository
         
         if($box == "inbox"){
             $where = [
-                'recipient_id'=>1,//Auth::user()->id
+                'recipient_id'=>Auth::user()->id
             ];
         } else {
             $where = [
-                'sender_id'=>1,//Auth::user()->id
+                'sender_id'=>Auth::user()->id
             ];
         }
         
@@ -112,44 +112,48 @@ class UserTaskRepsitory extends CoreRepository
 
     public function create($request)
     {
+      
         $task = new Task;
         $task->title = $request->title;
         $task->description = $request->description;
-        $task->work_id = $request->selectedJobId;
+        $task->work_id = $request->job;
+        $task->created_by = Auth::user()->id;
         $data = [];
         $fileData = [];
         if($task->save()){
-
-            $users = $request->users;
-            if(count($request->files)){
-                foreach($request->files as $file){
+            $users = $this->hasArrayItem($request->users);
+            $files = $this->hasArrayItem($request["files"]);
+            if($files){
+                foreach($files["fileList"] as $file){
                     $fileData [] = [
                         "document_id" => $task->id,
                         "document_type" => "task",
-                        "fole_id" => $file["response"]["id"]
+                        "file_id" => $file["response"]["id"],
+                        "created_at" => Carbon::now(),
+                        "updated_at" => Carbon::now(),
                     ];
                 }
-                DocumentFile::insert($files);
+                DocumentFile::insert($fileData);
             }
 
-            if(count($users)){
+            if($users){
                 foreach($users as $user){
                    $data [] = [
                         "sender_id" => $request->user()->id,
-                        "recipient_id" => $user["user"],
+                        "recipient_id" => $user["id"],
                         "task_id" => $task->id,
-                        "deadline" => time(), 
-                        //"viewed"
+                        "deadline" => $user["deadline"], 
                         "description" => $user["comment"], 
                         "status" => "active",
-                   ]; 
+                        "created_at" => Carbon::now(),
+                        "updated_at" => Carbon::now(),
+                    ]; 
                 }
-
-                $result = $this->begetQuery()::insert($data);
-
-                return $result;
+                $this->begetQuery()::insert($data);
             }
-
+           return true; 
+        }else {
+            return false;
         }
     }
 
