@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Repository\UserTaskRepsitory;
+use App\Repository\TaskRepository;
 
 class TaskController extends Controller
 {
@@ -30,5 +31,20 @@ class TaskController extends Controller
         return response()->json(['saved'=>true]);
     }
     
+
+    public function getUserTask(TaskRepository $taskRepository)
+    {
+
+        $model = $taskRepository->getUserTasks();
+        return response()->json($model);
+
+    }
+
+
+    public function view(TaskRepository $taskRepository,$id)
+    {
+        $model = $taskRepository->getById($id);
+        return response()->json($model);
+    }
     
 }

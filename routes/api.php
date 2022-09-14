@@ -53,6 +53,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::prefix('user')->group(function(){
         Route::get('/list',[UserController::class,'list']);
+        Route::get('/task',[TaskController::class,'getUserTask']);
+        Route::get('/task/{id}',[TaskController::class,'view']);             
     });
 
 
@@ -61,19 +63,17 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/index/{category}/{inbox}',[TaskController::class,'index']);
         Route::get('/single/{id}',[TaskController::class,'single']);
         Route::post('/create',[TaskController::class,'create']);
+        Route::get('/view/{id}',[TaskController::class,'view']);
     });
-
 
     Route::prefix('answer')->group(function(){
         Route::post('/create',[AnswerController::class,'create']);
     });
 
-
     Route::prefix('search')->group(function(){
         Route::get('/live/{q}',[SearchController::class,'live']);
         Route::get('/simple/{q}',[SearchController::class,'simple']);
         Route::get('/filter/{start?}/{end?}/{category?}/{term?}',[SearchController::class,'filter']);
-        
     });    
 
     
