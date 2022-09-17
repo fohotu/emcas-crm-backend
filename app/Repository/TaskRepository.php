@@ -44,8 +44,9 @@ class TaskRepository extends CoreRepository
             'work_id',
         ])
         ->with([
+            'files',    
             'work',
-            'user' => function($query) {
+            'user' => function($query){
                 $query->with([
                     'recipient' => function($query){
                         $query->with([
@@ -65,6 +66,7 @@ class TaskRepository extends CoreRepository
     }
 
 
+   
     
 
 

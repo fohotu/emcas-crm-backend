@@ -12,10 +12,13 @@ class UserTask extends Model
     
     protected $table='user_task';
 
-    protected $filable=[
+    protected $fillable=[
         'sender_id',
         'recipient_id',
         'task_id',
+        "deadline" ,
+        "description",
+        "status",
     ];
 
 

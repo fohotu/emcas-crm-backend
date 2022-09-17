@@ -40,11 +40,16 @@ class TaskController extends Controller
 
     }
 
-
     public function view(TaskRepository $taskRepository,$id)
     {
         $model = $taskRepository->getById($id);
         return response()->json($model);
     }
+
+    public function addUserToTask(UserTaskRepsitory $userTaskRepsitory,Request $request){
+        $model = $userTaskRepsitory->addUserToTask($request);
+        return response()->json($model);
+    }
+    
     
 }

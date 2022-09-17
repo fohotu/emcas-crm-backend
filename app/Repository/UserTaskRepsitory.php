@@ -158,6 +158,23 @@ class UserTaskRepsitory extends CoreRepository
     }
 
 
+    public function addUserToTask($request)
+    {
+        $data = [
+            "task_id" => $request->task_id,
+            "sender_id" => Auth::user()->id,
+            "recipient_id" => $request->user,
+            "deadline" => $request->deadline,
+            "description" => $request->description,
+            "status" => "active",
+            "created_at" => Carbon::now(),
+            "updated_at" => Carbon::now(),
+        ];   
+        $model = $this->begetQuery()::create($data);
+        return $model;
+    }
+
+
 
    
 
