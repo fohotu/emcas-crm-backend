@@ -15,4 +15,16 @@ class WorkController extends Controller
         $response = $workRepository->getAllWorkListByCategory($categoryId);
         return response()->json($response);
     }
+
+    public function getWithPaginate($categoryId,WorkRepository $workRepository)
+    {
+        $response = $workRepository->getPaginatedListByCategory($categoryId);
+        return response()->json($response);
+    }
+
+    public function create(Request $request,WorkRepository $workRepository)
+    {
+        return $workRepository->createNewJob($request);
+    }
+
 }

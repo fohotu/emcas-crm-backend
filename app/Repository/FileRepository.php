@@ -6,6 +6,7 @@ use App\Models\File as FileModel;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class FileRepository extends CoreRepository
 {
@@ -37,10 +38,23 @@ class FileRepository extends CoreRepository
 
     public function remove($request)
     {
+
         $fileModel=$this->begetQuery()::find($request->response['id']);
         if($fileModel){
             $fileModel->delete();
             Storage::delete('public/'.$request->response['link']);
+        }
+    }
+
+    public function removeWithRelation($request)
+    {
+        $fileModel=$this->begetQuery()::find($request->response['id']);
+        if($fileModel){
+            //Db::table('document_file')->where('document_id',$fileModel->id)->delete();
+            //$fileModel->foreign('document_id')->references('id')->on('tasks')->onDelete('cascade');
+            $fileModel->delete();
+
+            //Storage::delete('public/'.$request->response['link']);
         }
     }
 

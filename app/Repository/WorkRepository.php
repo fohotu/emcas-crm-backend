@@ -2,7 +2,9 @@
 namespace App\Repository;
 
 use App\Models\Work;
-
+use App\Models\DocumentFile;
+use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class WorkRepository extends CoreRepository
 {
@@ -47,6 +49,53 @@ class WorkRepository extends CoreRepository
     
 
     }
+
+
+    public function getPaginatedListByCategory($category,$limit=10)
+    {
+        $model = 
+            $this->begetQuery()::select(
+                ['id','title','description','term']
+            )
+            ->where(
+                ['category_id' => $category ]
+            )
+            ->orderByDesc('id')
+            ->paginate($limit);    
+        return $model;
+    
+
+    }
+
+    public function createNewJob($request)
+    {
+        $model = new Work;
+        $model->title = $request->title;
+        $model->description = $request->description;
+        $model->term = $request->deadline;
+        $model->category_id = $request->category;
+        $model->created_by =  Auth::user()->id;
+        if($model->save()){
+            $files = $this->hasArrayItem($request["files"]);
+            if($files && isset($files["fileList"])){
+                foreach($files["fileList"] as $file){
+                    $fileData [] = [
+                        "document_type" => "work",
+                        "document_id" => $model->id,
+                        "file_id" => $file["response"]["id"],
+                        "created_at" => Carbon::now(),
+                        "updated_at" => Carbon::now(),
+                    ];
+                }
+                DocumentFile::insert($fileData);
+            }
+            return true;
+        }
+        return false;
+    }
+
+
+
 
 
 

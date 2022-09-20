@@ -49,6 +49,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::prefix('work')->group(function(){
         Route::get('/by-category/{categoryId}',[WorkController::class,'getByCategory']);
+        Route::get('/by-category/paginate/{categoryId}',[WorkController::class,'getWithPaginate']);
+        Route::post('/create',[WorkController::class,'create']);
     });
 
     Route::prefix('user')->group(function(){
@@ -56,6 +58,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/task',[TaskController::class,'getUserTask']);
         Route::get('/task/{id}',[TaskController::class,'view']);             
         Route::post('/task/create',[TaskController::class,'addUserToTask']);           
+        Route::post('/task/remove',[TaskController::class,'removeUserFromTask']);           
     });
 
 
@@ -65,6 +68,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/single/{id}',[TaskController::class,'single']);
         Route::post('/create',[TaskController::class,'create']);
         Route::get('/view/{id}',[TaskController::class,'view']);
+        Route::post('/update',[TaskController::class,'update']);
     });
 
     Route::prefix('answer')->group(function(){

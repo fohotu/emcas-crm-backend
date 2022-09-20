@@ -50,6 +50,27 @@ class TaskController extends Controller
         $model = $userTaskRepsitory->addUserToTask($request);
         return response()->json($model);
     }
+
+    public function update(TaskRepository $taskRepository,Request $request)
+    {
+        $result = $taskRepository->updateTask($request);
+
+
+        if(!$result){
+            return response()->json(['saved'=>false]);
+        }    
+        return response()->json(['saved'=>true]);
     
+    }  
+    
+    
+    public function removeUserFromTask(UserTaskRepsitory $userTaskRepsitory,Request $request)
+    {
+        $result = $userTaskRepsitory->removeUserFromTask($request->id);
+        if(!$result){
+            return response()->json(['removed' =>false]);
+        }    
+        return response()->json(['removed' =>true]);
+    }
     
 }

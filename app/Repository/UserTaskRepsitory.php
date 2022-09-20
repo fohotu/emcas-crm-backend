@@ -175,6 +175,15 @@ class UserTaskRepsitory extends CoreRepository
     }
 
 
+    public function removeUserFromTask($id)
+    {
+        $model = $this->begetQuery()::find($id);
+        if($model)
+            return $model->delete();
+        return false;
+    }
+
+
 
    
 

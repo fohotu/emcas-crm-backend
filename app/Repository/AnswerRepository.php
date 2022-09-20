@@ -40,7 +40,7 @@ class AnswerRepository extends CoreRepository
                 DocumentFile::insert($fileData);
             }
            return true; 
-        }else {
+        }else{
             return false;
         }
     }
