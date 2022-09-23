@@ -129,14 +129,14 @@ class WorkRepository extends CoreRepository
             ::where(['id'=>$id])
             ->with(
                 [
-                    'task'=>function($query){
+                    'task' => function($query){
                         $query->with(['employee'=>function($query){
                             $query->select()
                             ->with([
                                 'sender'=>function($query){
                                     $query->select(
                                             [
-                                               'id', 
+                                              'id', 
                                               'name'
                                             ]
                                     );
@@ -159,7 +159,7 @@ class WorkRepository extends CoreRepository
                             ]);
                         }]);
                     },
-                    'files'=>function($query){
+                    'files' => function($query){
                         $query->select([
                             'title',
                             'link'
@@ -167,8 +167,39 @@ class WorkRepository extends CoreRepository
                     }
                 ]
             )
-            ->get();
+            ->first();
         return $model;
+    }
+
+
+    public function updateJob($request)
+    {
+        $model = $this->begetQuery()::find($request->id);
+        if($model){
+            $model->title = $request->title;
+            $model->description = $request->description;
+            $model->term = $request->term;
+            if($model->save()){
+                $files = $this->hasArrayItem($request["files"]);
+                $filesList = $this->hasArrayItem($request["files"]["fileList"]);
+                if($files && $filesList){
+                    foreach($files["fileList"] as $file){
+                        $fileData[] = [
+                            "document_type" => "work",
+                            "document_id" => $model->id,
+                            "file_id" => $file["response"]["id"],
+                            "created_at" => Carbon::now(),
+                            "updated_at" => Carbon::now(),
+                        ];
+                    }
+                    DocumentFile::insert($fileData);
+                }
+                return true;
+            }else{
+                return false;
+            }    
+        }
+        return false;
     }
 
 

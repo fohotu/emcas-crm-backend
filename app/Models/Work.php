@@ -16,10 +16,22 @@ class Work extends Model
         'created_by'
     ];
 
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function task()
+    {
+        return $this->hasMany(Task::class);
+    }
+
     public function files()
     {
         return $this
                 ->belongsToMany(File::class,'document_file','document_id','file_id')
                 ->wherePivot('document_type','work');
     }
+
 }

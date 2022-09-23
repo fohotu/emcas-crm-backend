@@ -57,7 +57,7 @@ class SearchRepository
 
     } 
 
-    public function filter($start=null,$end=null,$category=null,$term=null)
+    public function filter($start=null,$end=null,$category=null,$limit=10)
     {
         $start = new Carbon($start);
         $end = new Carbon($end);
@@ -95,7 +95,7 @@ class SearchRepository
                 })
                 ->with('work');
             }
-        ])->get();
+        ])->paginate($limit);
         
         return $model;
        

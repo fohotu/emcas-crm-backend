@@ -27,4 +27,22 @@ class WorkController extends Controller
         return $workRepository->createNewJob($request);
     }
 
+    public function single($id,WorkRepository $workRepository)
+    {
+        $response = $workRepository->getOne($id);
+        return response()->json($response);
+    }
+
+    public function update(Request $request,WorkRepository $workRepository)
+    {
+        $result = $workRepository->updateJob($request);
+        if(!$result){
+            return response()->json(['updated'=>false]);
+        }
+        return response()->json(['updated'=>true]);
+
+    }
+
+
+
 }

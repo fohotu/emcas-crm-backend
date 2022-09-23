@@ -50,7 +50,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('work')->group(function(){
         Route::get('/by-category/{categoryId}',[WorkController::class,'getByCategory']);
         Route::get('/by-category/paginate/{categoryId}',[WorkController::class,'getWithPaginate']);
+        Route::get('/single/{id}',[WorkController::class,'single']);
         Route::post('/create',[WorkController::class,'create']);
+       
+        Route::post('/update',[WorkController::class,'update']);
     });
 
     Route::prefix('user')->group(function(){

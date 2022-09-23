@@ -44,16 +44,16 @@ class FileRepository extends CoreRepository
             $fileModel->delete();
             Storage::delete('public/'.$request->response['link']);
         }
+
     }
 
     public function removeWithRelation($request)
     {
-        $fileModel=$this->begetQuery()::find($request->response['id']);
+        $fileModel = $this->begetQuery()::find($request->response['id']);
         if($fileModel){
             //Db::table('document_file')->where('document_id',$fileModel->id)->delete();
             //$fileModel->foreign('document_id')->references('id')->on('tasks')->onDelete('cascade');
             $fileModel->delete();
-
             //Storage::delete('public/'.$request->response['link']);
         }
     }
