@@ -72,5 +72,10 @@ class TaskController extends Controller
         }    
         return response()->json(['removed' =>true]);
     }
+
+    public function changeStatus()
+    {
+        
+    }
     
 }
