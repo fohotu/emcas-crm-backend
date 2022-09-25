@@ -72,6 +72,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/create',[TaskController::class,'create']);
         Route::get('/view/{id}',[TaskController::class,'view']);
         Route::post('/update',[TaskController::class,'update']);
+        Route::post('/change-status',[TaskController::class,'changeStatus']);
     });
 
     Route::prefix('answer')->group(function(){

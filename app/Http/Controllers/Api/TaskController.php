@@ -73,9 +73,13 @@ class TaskController extends Controller
         return response()->json(['removed' =>true]);
     }
 
-    public function changeStatus()
+    public function changeStatus(UserTaskRepsitory $userTaskRepsitory,Request $request)
     {
-        
+        $result = $userTaskRepsitory->changeTaskStatus($request->id,$request->status);
+        if(!$result){
+            return response()->json(['statusChanged' =>false]);
+        }    
+        return response()->json(['statusChanged' =>true]);
     }
     
 }

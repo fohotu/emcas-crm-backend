@@ -4,6 +4,7 @@ namespace App\Repository;
 use App\Models\Task;
 use App\Models\Answer;
 use App\Models\UserTask;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
 
@@ -39,8 +40,8 @@ class SearchRepository
         })
         ->where (function($query){
             $query
-            ->where('sender_id','=',1)
-            ->orWhere('recipient_id','=',1);
+            ->where('sender_id','=',Auth::user()->id)
+            ->orWhere('recipient_id','=',Auth::user()->id);
         })
         ->where (function ($query) use ($queryString) {
             foreach ($queryString as $item) {
@@ -59,11 +60,10 @@ class SearchRepository
 
     public function filter($start=null,$end=null,$category=null,$limit=10)
     {
+
         $start = new Carbon($start);
         $end = new Carbon($end);
-       //$start = Carbon::create(2022, 8, 28, 0, 0, 0);   
-       //$end = Carbon::create(2022, 8, 31, 4, 0, 0);
-
+       
         $model = UserTask::select(
             [
                 'id',
@@ -77,9 +77,16 @@ class SearchRepository
         ->where('status','=','deadTime')
         ->where(function ($query) use ($start,$end) {
             $query->where (
-                'sender_id','=',1
+                'recipient_id','=',Auth::user()->id
+            );
+
+               /*
+               $query->where (
+                'sender_id','=',Auth::user()->id
             )
-            ->orWhere('recipient_id','=',1);
+            ->orWhere('recipient_id','=',Auth::user()->id);
+               */ 
+
         })
         ->whereBetween('created_at', [
             $start,
@@ -90,7 +97,7 @@ class SearchRepository
                 $query->select (['id','title','description','work_id'])
                 ->whereHas('work', function($query) use($category) {
                     if($category) {
-                        $query->where('category_id','=',2);
+                        $query->where('category_id','=',$category);
                     }
                 })
                 ->with('work');

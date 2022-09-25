@@ -184,6 +184,19 @@ class UserTaskRepsitory extends CoreRepository
     }
 
 
+    public function changeTaskStatus($id,$status)
+    {
+        $model = $this->begetQuery()::find($id);
+        if($model){
+            $model->status = $status;
+            return $model->save();
+        }
+        return false;
+
+            
+    }
+
+
 
    
 
